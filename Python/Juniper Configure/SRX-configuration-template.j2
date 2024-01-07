@@ -1,0 +1,64 @@
+set system host-name SRX300
+set system login retry-options tries-before-disconnect 10
+set system login retry-options lockout-period 1
+set system login idle-timeout 30
+set system login user admin class super-user
+set system login announcement "You are accessing a controlled system that is used for labbing purposes"
+set system services ssh root-login deny
+set system services ssh sftp-server
+set system services ssh connection-limit 10
+set system services netconf ssh
+set system services web-management http
+set system services web-management https system-generated-certificate
+set system time-zone America/Chicago
+set system name-server 8.8.8.8
+set system name-server 1.1.1.1
+set system name-server 192.168.86.1
+set system ntp server 192.168.86.1
+set chassis fpc 0 pic 0 tunnel-queuing
+set security forwarding-options family inet6 mode packet-based
+set security forwarding-options family mpls mode packet-based
+set security forwarding-options family iso mode packet-based
+{% for item in ifd %} 
+set interfaces {{ item.name }} unit {{ item.unit }} family inet address {{ item.ip }} 
+{% endfor %}
+set interfaces ge-0/0/5 unit 0 family inet dhcp
+set interfaces irb unit 333 family inet address 10.33.33.33/24
+set interfaces lo0 unit 0 family inet address 10.10.10.1/24
+set vlans VOIP vlan-id 77
+set vlans VTC vlan-id 200
+set vlans management vlan-id 333
+set vlans management l3-interface irb.333
+set vlans printer vlan-id 175
+set vlans users vlan-id 222
+set protocols bgp group internal type internal
+set protocols bgp group external type external
+set protocols lldp interface all
+set protocols lldp-med interface all
+set protocols mstp configuration-name automation.lab
+set protocols mstp revision-level 2
+set protocols mstp bridge-priority 60k
+set protocols mstp bpdu-block-on-edge
+set protocols mstp interface ge-0/0/0 edge
+set protocols mstp interface ge-0/0/1 edge
+set protocols mstp interface ge-0/0/2 edge
+set protocols mstp interface ge-0/0/3 edge
+set protocols mstp interface ge-0/0/4 edge
+set protocols mstp msti 1 bridge-priority 60k
+set protocols mstp msti 1 vlan 1-199
+set protocols mstp msti 2 bridge-priority 60k
+set protocols mstp msti 2 vlan 200-299
+set protocols mstp msti 3 bridge-priority 60k
+set protocols mstp msti 3 vlan 300-399
+set routing-options static route 0.0.0.0/0 next-hop 192.168.86.1
+set routing-options router-id 10.33.33.33
+set switch-options voip interface ge-0/0/0.0 vlan VOIP
+set switch-options voip interface ge-0/0/0.0 forwarding-class expedited-forwarding
+set switch-options voip interface ge-0/0/1.0 vlan VOIP
+set switch-options voip interface ge-0/0/1.0 forwarding-class expedited-forwarding
+set switch-options voip interface ge-0/0/2.0 vlan VOIP
+set switch-options voip interface ge-0/0/2.0 forwarding-class expedited-forwarding
+set switch-options voip interface ge-0/0/3.0 vlan VOIP
+set switch-options voip interface ge-0/0/3.0 forwarding-class expedited-forwarding
+set switch-options voip interface ge-0/0/4.0 vlan VOIP
+set switch-options voip interface ge-0/0/4.0 forwarding-class expedited-forwarding
