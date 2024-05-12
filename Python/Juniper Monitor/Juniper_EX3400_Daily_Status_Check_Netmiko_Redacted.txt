@@ -1,0 +1,100 @@
+from netmiko import ConnectHandler
+EAS1 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.13',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+EAS2 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.14',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+EAS3 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.15',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+EAS4 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.16',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+EAS5 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.17',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+EAS6 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.18',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+EAS7 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.19',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+EAS8 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.20',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+EAS9 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.21',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+EAS10 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.22',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+EAS11 = {
+	'device_type': 'juniper',
+	'host':   'x.x.x.23',
+	'username': 'juniper',
+	'password': 'juniper123',
+	'port' : 22,
+}
+all_devices = [EAS1, EAS2, EAS3, EAS4, EAS5, EAS6, EAS7, EAS8, EAS9, EAS10, EAS11]
+for devices in all_devices:
+    try:
+       net_connect = ConnectHandler(**devices)
+       output = net_connect.send_command('show configuration system host-name')
+       print(output)
+       output = net_connect.send_command('show interfaces terse irb.550')
+       print(output)
+       output = net_connect.send_command('show virtual-chassis | match Prsnt')
+       print(output)
+       output = net_connect.send_command('show version | match Junos:')
+       print(output)
+       #output = net_connect.send_command('show system reboot')
+       #print(output)
+       output = net_connect.send_command('show system storage | match /dev/gpt/junos')
+       print(output)
+       output = net_connect.send_command('show dot1x interface | match Authenticated | last 3')
+       print(output)
+       print("-----------------------------------------------------------------------")
+       net_connect.disconnect
+    except:
+       continue 
